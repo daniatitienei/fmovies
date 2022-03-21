@@ -1,3 +1,5 @@
+import 'package:fmovies/domain/models/movie/Movie.dart';
+
 class CommingSoonMovies {
   List<CommingSoonMovie>? movies;
   String? errorMessage;
@@ -83,43 +85,43 @@ class CommingSoonMovie {
     if (json['genreList'] != null) {
       genreList = <GenreList>[];
       json['genreList'].forEach((v) {
-        genreList!.add(new GenreList.fromJson(v));
+        genreList!.add(GenreList.fromJson(v));
       });
     }
     directors = json['directors'];
     if (json['directorList'] != null) {
       directorList = <DirectorList>[];
       json['directorList'].forEach((v) {
-        directorList!.add(new DirectorList.fromJson(v));
+        directorList!.add(DirectorList.fromJson(v));
       });
     }
     stars = json['stars'];
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['title'] = this.title;
-    data['fullTitle'] = this.fullTitle;
-    data['year'] = this.year;
-    data['releaseState'] = this.releaseState;
-    data['image'] = this.image;
-    data['runtimeMins'] = this.runtimeMins;
-    data['runtimeStr'] = this.runtimeStr;
-    data['plot'] = this.plot;
-    data['contentRating'] = this.contentRating;
-    data['imDbRating'] = this.imDbRating;
-    data['imDbRatingCount'] = this.imDbRatingCount;
-    data['metacriticRating'] = this.metacriticRating;
-    data['genres'] = this.genres;
-    if (this.genreList != null) {
-      data['genreList'] = this.genreList!.map((v) => v.toJson()).toList();
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['title'] = title;
+    data['fullTitle'] = fullTitle;
+    data['year'] = year;
+    data['releaseState'] = releaseState;
+    data['image'] = image;
+    data['runtimeMins'] = runtimeMins;
+    data['runtimeStr'] = runtimeStr;
+    data['plot'] = plot;
+    data['contentRating'] = contentRating;
+    data['imDbRating'] = imDbRating;
+    data['imDbRatingCount'] = imDbRatingCount;
+    data['metacriticRating'] = metacriticRating;
+    data['genres'] = genres;
+    if (genreList != null) {
+      data['genreList'] = genreList!.map((v) => v.toJson()).toList();
     }
-    data['directors'] = this.directors;
-    if (this.directorList != null) {
-      data['directorList'] = this.directorList!.map((v) => v.toJson()).toList();
+    data['directors'] = directors;
+    if (directorList != null) {
+      data['directorList'] = directorList!.map((v) => v.toJson()).toList();
     }
-    data['stars'] = this.stars;
+    data['stars'] = stars;
     return data;
   }
 }
@@ -136,9 +138,9 @@ class GenreList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['key'] = this.key;
-    data['value'] = this.value;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['key'] = key;
+    data['value'] = value;
     return data;
   }
 }
@@ -155,9 +157,9 @@ class DirectorList {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['id'] = this.id;
-    data['name'] = this.name;
+    final Map<String, dynamic> data = Map<String, dynamic>();
+    data['id'] = id;
+    data['name'] = name;
     return data;
   }
 }

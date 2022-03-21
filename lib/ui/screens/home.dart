@@ -1,11 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
-import 'package:fmovies/data/repository/movie_api_impl.dart';
-import 'package:fmovies/domain/models/movie/coming_soon.dart';
-import 'package:fmovies/domain/models/movie/most_popular.dart';
+import 'package:fmovies/data/repository/MovieApiImpl.dart';
+import 'package:fmovies/domain/models/movie/CommingSoonMovies.dart';
+import 'package:fmovies/domain/models/movie/MostPopularMovies.dart';
+import 'package:fmovies/domain/models/movie/Movie.dart';
+import 'package:fmovies/ui/screens/InspectMovie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
+
+  static const routeName = "/home";
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
@@ -22,10 +26,11 @@ class _HomeScreenState extends State<HomeScreen> {
     mostPopularMoviesFuture = MovieApiRepositoryImpl().getMostPopularMovies();
   }
 
-  Widget movieCard(
-      {required String imageUrl,
-      required String title,
-      required void Function() onClick}) {
+  Widget movieCard({
+    required String imageUrl,
+    required String title,
+    required void Function() onClick,
+  }) {
     return GestureDetector(
       onTap: onClick,
       child: Column(
@@ -60,12 +65,6 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         centerTitle: true,
       ),
-      bottomNavigationBar: BottomNavigationBar(items: [
-        const BottomNavigationBarItem(
-            icon: const Icon(Icons.movie), label: "321"),
-        const BottomNavigationBarItem(
-            icon: const Icon(Icons.movie), label: "dsa")
-      ]),
       body: FutureBuilder<CommingSoonMovies>(
         future: commingSoonMoviesFuture,
         builder: (context, snapshot) {
@@ -81,7 +80,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       const Text(
                         'COMMING SOON',
                         style: TextStyle(
-                            fontWeight: FontWeight.bold, letterSpacing: 3),
+                          fontWeight: FontWeight.bold,
+                          letterSpacing: 3,
+                        ),
                       ),
                       Container(
                         height: 15,
@@ -91,7 +92,18 @@ class _HomeScreenState extends State<HomeScreen> {
                         itemBuilder: (_, index, slide) => movieCard(
                           imageUrl: movieList[index].image.toString(),
                           title: movieList[index].title.toString(),
-                          onClick: () => {},
+                          onClick: () => {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => InspectMovie(
+                                  movie: Movie.fromCommingSoonMovie(
+                                    movieList[index],
+                                  ),
+                                ),
+                              ),
+                            )
+                          },
                         ),
                         options: CarouselOptions(
                           autoPlay: true,
@@ -134,7 +146,16 @@ class _HomeScreenState extends State<HomeScreen> {
                                     .toString(),
                                 title: mostPopularMovies.movies![index].title
                                     .toString(),
-                                onClick: () => {},
+                                onClick: () => {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => InspectMovie(
+                                        movie: mostPopularMovies.movies![index],
+                                      ),
+                                    ),
+                                  )
+                                },
                               ),
                               physics: const NeverScrollableScrollPhysics(),
                               itemCount: mostPopularMovies.movies!.length,

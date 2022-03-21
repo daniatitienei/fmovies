@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:fmovies/auth/secrets.dart';
-import 'package:fmovies/domain/models/movie/coming_soon.dart';
-import 'package:fmovies/domain/models/movie/most_popular.dart';
-import 'package:fmovies/domain/repository/movie_api.dart';
+import 'package:fmovies/auth/Secrets.dart';
+import 'package:fmovies/domain/models/movie/CommingSoonMovies.dart';
+import 'package:fmovies/domain/models/movie/MostPopularMovies.dart';
+import 'package:fmovies/domain/repository/MovieApi.dart';
 import 'package:fmovies/ui/utils/constants.dart';
 import 'package:http/http.dart' as http;
 
