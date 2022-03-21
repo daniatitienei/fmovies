@@ -1,14 +1,14 @@
-class MovieList {
-  List<Items>? items;
+class CommingSoonMovies {
+  List<CommingSoonMovie>? movies;
   String? errorMessage;
 
-  MovieList({this.items, this.errorMessage});
+  CommingSoonMovies({this.movies, this.errorMessage});
 
-  MovieList.fromJson(Map<String, dynamic> json) {
+  CommingSoonMovies.fromJson(Map<String, dynamic> json) {
     if (json['items'] != null) {
-      items = <Items>[];
+      movies = <CommingSoonMovie>[];
       json['items'].forEach((v) {
-        items!.add(Items.fromJson(v));
+        movies!.add(CommingSoonMovie.fromJson(v));
       });
     }
     errorMessage = json['errorMessage'];
@@ -16,15 +16,15 @@ class MovieList {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = Map<String, dynamic>();
-    if (items != null) {
-      data['items'] = items!.map((v) => v.toJson()).toList();
+    if (movies != null) {
+      data['items'] = movies!.map((v) => v.toJson()).toList();
     }
     data['errorMessage'] = errorMessage;
     return data;
   }
 }
 
-class Items {
+class CommingSoonMovie {
   String? id;
   String? title;
   String? fullTitle;
@@ -44,7 +44,7 @@ class Items {
   List<DirectorList>? directorList;
   String? stars;
 
-  Items({
+  CommingSoonMovie({
     this.id,
     this.title,
     this.fullTitle,
@@ -65,7 +65,7 @@ class Items {
     this.stars,
   });
 
-  Items.fromJson(Map<String, dynamic> json) {
+  CommingSoonMovie.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     title = json['title'];
     fullTitle = json['fullTitle'];
