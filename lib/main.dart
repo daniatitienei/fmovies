@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:fmovies/ui/screens/home.dart';
+import 'package:fmovies/ui/screens/Home.dart';
+import 'package:fmovies/ui/screens/InspectMovie.dart';
 
 void main() {
   runApp(const MyApp());
@@ -12,11 +13,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
-        theme: ThemeData(
+      title: 'Flutter Demo',
+      theme: ThemeData(
           brightness: Brightness.dark,
           primarySwatch: Colors.yellow,
-        ),
-        home: const HomeScreen());
+          appBarTheme: AppBarTheme(color: Color.fromARGB(221, 27, 27, 27)),
+          scaffoldBackgroundColor: Color.fromARGB(221, 27, 27, 27)),
+      home: const HomeScreen(),
+    );
   }
 }
