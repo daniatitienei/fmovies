@@ -1,5 +1,3 @@
-import 'package:fmovies/domain/models/movie/Movie.dart';
-
 class CommingSoonMovies {
   List<CommingSoonMovie>? movies;
   String? errorMessage;

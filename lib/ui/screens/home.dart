@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:fmovies/data/repository/MovieApiImpl.dart';
 import 'package:fmovies/domain/models/movie/CommingSoonMovies.dart';
 import 'package:fmovies/domain/models/movie/MostPopularMovies.dart';
-import 'package:fmovies/domain/models/movie/Movie.dart';
 import 'package:fmovies/ui/screens/InspectMovie.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -97,9 +96,7 @@ class _HomeScreenState extends State<HomeScreen> {
                               context,
                               MaterialPageRoute(
                                 builder: (context) => InspectMovie(
-                                  movie: Movie.fromCommingSoonMovie(
-                                    movieList[index],
-                                  ),
+                                  id: movieList[index].id.toString(),
                                 ),
                               ),
                             )
@@ -135,6 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               height: 15,
                             ),
+
                             GridView.builder(
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
@@ -151,7 +149,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                     context,
                                     MaterialPageRoute(
                                       builder: (context) => InspectMovie(
-                                        movie: mostPopularMovies.movies![index],
+                                        id: mostPopularMovies.movies![index].id
+                                            .toString(),
                                       ),
                                     ),
                                   )
