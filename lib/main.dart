@@ -15,10 +15,11 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
-          brightness: Brightness.dark,
-          primarySwatch: Colors.yellow,
-          appBarTheme: AppBarTheme(color: Color.fromARGB(221, 27, 27, 27)),
-          scaffoldBackgroundColor: Color.fromARGB(221, 27, 27, 27)),
+        brightness: Brightness.dark,
+        primarySwatch: Colors.yellow,
+        appBarTheme: AppBarTheme(color: Color.fromARGB(221, 27, 27, 27)),
+        scaffoldBackgroundColor: Color.fromARGB(221, 27, 27, 27),
+      ),
       home: const HomeScreen(),
     );
   }
