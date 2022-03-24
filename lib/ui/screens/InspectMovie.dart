@@ -80,7 +80,9 @@ class _InspectMovieState extends State<InspectMovie> {
                       Row(
                         children: [
                           RatingBarIndicator(
-                            rating: double.parse(movie.imDbRating.toString()),
+                            rating: (movie.imDbRating != null)
+                                ? double.parse(movie.imDbRating.toString())
+                                : 0.0,
                             itemBuilder: (context, index) => const Icon(
                               Icons.star,
                               color: Colors.amber,
@@ -89,78 +91,20 @@ class _InspectMovieState extends State<InspectMovie> {
                             itemSize: 24.0,
                             direction: Axis.horizontal,
                           ),
-                          Text("(${movie.imDbRatingVotes})")
+                          Text(
+                            "(${(movie.imDbRatingVotes != null) ? movie.imDbRatingVotes : 0})",
+                          )
                         ],
                       ),
                       Container(
                         height: 20,
                       ),
-                      Card(
-                        child: ExpansionTile(
-                          onExpansionChanged: (expansion) =>
-                              isActorListExpanded = expansion,
-                          initiallyExpanded: isActorListExpanded,
-                          expandedCrossAxisAlignment: CrossAxisAlignment.start,
-                          expandedAlignment: Alignment.topLeft,
-                          collapsedTextColor: Colors.white,
-                          backgroundColor: Colors.transparent,
-                          collapsedBackgroundColor: Colors.transparent,
-                          childrenPadding: const EdgeInsets.symmetric(
-                            horizontal: 15,
-                            vertical: 10,
-                          ),
-                          title: Text(
-                            'Actors',
-                            style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              fontSize: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge
-                                  ?.fontSize,
-                            ),
-                          ),
-                          children: [
-                            for (var actor in movie.actor!)
-                              Padding(
-                                padding:
-                                    const EdgeInsets.symmetric(vertical: 10),
-                                child: Row(
-                                  children: [
-                                    CircleAvatar(
-                                      backgroundImage: NetworkImage(
-                                        actor.image.toString(),
-                                      ),
-                                      radius:
-                                          MediaQuery.of(context).size.width *
-                                              0.1,
-                                    ),
-                                    Padding(
-                                      padding: const EdgeInsets.only(left: 10),
-                                      child: Column(
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            actor.name.toString(),
-                                            style: const TextStyle(
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          Text(
-                                            "As ${actor.asCharacter.toString()}",
-                                            style: TextStyle(
-                                              color:
-                                                  Colors.white.withOpacity(0.7),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    )
-                                  ],
-                                ),
-                              )
-                          ],
-                        ),
+                      actorsExpandableCard(
+                        context: context,
+                        movie: movie,
+                        onExpansionChanged: (expansion) =>
+                            isActorListExpanded = expansion,
+                        initiallyExpanded: isActorListExpanded,
                       ),
                     ],
                   ),
@@ -178,4 +122,73 @@ class _InspectMovieState extends State<InspectMovie> {
       },
     );
   }
+
+  Card actorsExpandableCard({
+    required BuildContext context,
+    required Movie movie,
+    required Function(bool) onExpansionChanged,
+    required bool initiallyExpanded,
+  }) {
+    return Card(
+      child: ExpansionTile(
+        onExpansionChanged: onExpansionChanged,
+        initiallyExpanded: isActorListExpanded,
+        expandedCrossAxisAlignment: CrossAxisAlignment.start,
+        expandedAlignment: Alignment.topLeft,
+        collapsedTextColor: Colors.white,
+        backgroundColor: Colors.transparent,
+        collapsedBackgroundColor: Colors.transparent,
+        childrenPadding: const EdgeInsets.symmetric(
+          horizontal: 15,
+          vertical: 10,
+        ),
+        title: Text(
+          'Actors',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
+          ),
+        ),
+        children: [
+          for (var actor in movie.actor!) actorListTile(actor, context)
+        ],
+      ),
+    );
+  }
+
+  Widget actorListTile(Actor actor, BuildContext context) => Padding(
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        child: Row(
+          children: [
+            Expanded(
+              child: CircleAvatar(
+                backgroundImage: NetworkImage(
+                  actor.image.toString(),
+                ),
+                radius: MediaQuery.of(context).size.width * 0.1,
+              ),
+            ),
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    actor.name.toString(),
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  Text(
+                    "As ${actor.asCharacter.toString()}",
+                    style: TextStyle(
+                      color: Colors.white.withOpacity(0.7),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      );
 }
