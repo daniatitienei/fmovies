@@ -81,7 +81,7 @@ class _InspectMovieState extends State<InspectMovie> {
                         children: [
                           RatingBarIndicator(
                             rating: (movie.imDbRating != null)
-                                ? double.parse(movie.imDbRating.toString())
+                                ? double.parse(movie.imDbRating.toString()) / 2
                                 : 0.0,
                             itemBuilder: (context, index) => const Icon(
                               Icons.star,
@@ -123,7 +123,7 @@ class _InspectMovieState extends State<InspectMovie> {
     );
   }
 
-  Card actorsExpandableCard({
+  Widget actorsExpandableCard({
     required BuildContext context,
     required Movie movie,
     required Function(bool) onExpansionChanged,
