@@ -1,9 +1,13 @@
+import 'dart:developer';
+
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:fmovies/data/repository/MovieApiImpl.dart';
 import 'package:fmovies/domain/models/movie/CommingSoonMovies.dart';
 import 'package:fmovies/domain/models/movie/MostPopularMovies.dart';
-import 'package:fmovies/ui/screens/InspectMovie.dart';
+import 'package:fmovies/domain/models/movie/SearchTitle.dart';
+import 'package:fmovies/ui/screens/home/MovieCard.dart';
+import 'package:fmovies/ui/screens/inspect_movie/InspectMovie.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -25,44 +29,24 @@ class _HomeScreenState extends State<HomeScreen> {
     mostPopularMoviesFuture = MovieApiRepositoryImpl().getMostPopularMovies();
   }
 
-  Widget movieCard({
-    required String imageUrl,
-    required String title,
-    required void Function() onClick,
-  }) {
-    return GestureDetector(
-      onTap: onClick,
-      child: Column(
-        children: [
-          Expanded(
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(15),
-              child: Image(
-                image: NetworkImage(imageUrl),
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Container(height: 8),
-          Text(
-            title,
-            textAlign: TextAlign.center,
-            style: const TextStyle(fontWeight: FontWeight.bold),
-          )
-        ],
-      ),
-    );
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'FMovies',
+          'Moviely',
           style: TextStyle(letterSpacing: 2),
         ),
         centerTitle: true,
+        actions: [
+          IconButton(
+            onPressed: () async => await showSearch(
+              context: context,
+              delegate: MovieSearchDelegate(),
+            ),
+            icon: const Icon(Icons.search),
+          ),
+        ],
       ),
       body: FutureBuilder<CommingSoonMovies>(
         future: commingSoonMoviesFuture,
@@ -88,7 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       CarouselSlider.builder(
                         itemCount: movieList!.length,
-                        itemBuilder: (_, index, slide) => movieCard(
+                        itemBuilder: (_, index, slide) => MovieCard(
                           imageUrl: movieList[index].image.toString(),
                           title: movieList[index].title.toString(),
                           onClick: () => {
@@ -132,14 +116,13 @@ class _HomeScreenState extends State<HomeScreen> {
                             Container(
                               height: 15,
                             ),
-
                             GridView.builder(
                               gridDelegate:
                                   const SliverGridDelegateWithFixedCrossAxisCount(
                                 crossAxisCount: 2,
                                 mainAxisSpacing: 25,
                               ),
-                              itemBuilder: (context, index) => movieCard(
+                              itemBuilder: (context, index) => MovieCard(
                                 imageUrl: mostPopularMovies.movies![index].image
                                     .toString(),
                                 title: mostPopularMovies.movies![index].title
@@ -178,5 +161,75 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+}
+
+class MovieSearchDelegate extends SearchDelegate {
+  @override
+  List<Widget> buildActions(BuildContext context) {
+    return [
+      IconButton(
+        onPressed: () {
+          query = '';
+        },
+        icon: const Icon(Icons.clear),
+      )
+    ];
+  }
+
+  @override
+  Widget buildLeading(BuildContext context) {
+    return IconButton(
+      onPressed: () {
+        Navigator.pop(context);
+      },
+      icon: const Icon(Icons.arrow_back_ios_new),
+    );
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    final searchFuture = MovieApiRepositoryImpl().searchTitle(query);
+    return FutureBuilder<SearchTitle>(
+      future: searchFuture,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          final results = snapshot.data!.results!;
+          return GridView.builder(
+            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              mainAxisSpacing: 30,
+            ),
+            itemBuilder: (context, index) {
+              final movie = results[index];
+              return MovieCard(
+                imageUrl: movie.image.toString(),
+                title: movie.title.toString(),
+                onClick: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => InspectMovie(
+                        id: movie.id.toString(),
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
+            itemCount: results.length,
+          );
+        } else {
+          return const Center(
+            child: Text("No search results"),
+          );
+        }
+      },
+    );
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+    return Container();
   }
 }

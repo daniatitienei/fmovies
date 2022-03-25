@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:fmovies/data/repository/MovieApiImpl.dart';
 import 'package:fmovies/domain/models/movie/Movie.dart';
+import 'package:fmovies/ui/screens/inspect_movie/ActorsExpandableCard.dart';
 
 class InspectMovie extends StatefulWidget {
   const InspectMovie({Key? key, required this.id}) : super(key: key);
@@ -99,8 +100,7 @@ class _InspectMovieState extends State<InspectMovie> {
                       Container(
                         height: 20,
                       ),
-                      actorsExpandableCard(
-                        context: context,
+                      ActorsExpandableCard(
                         movie: movie,
                         onExpansionChanged: (expansion) =>
                             isActorListExpanded = expansion,
@@ -122,73 +122,4 @@ class _InspectMovieState extends State<InspectMovie> {
       },
     );
   }
-
-  Widget actorsExpandableCard({
-    required BuildContext context,
-    required Movie movie,
-    required Function(bool) onExpansionChanged,
-    required bool initiallyExpanded,
-  }) {
-    return Card(
-      child: ExpansionTile(
-        onExpansionChanged: onExpansionChanged,
-        initiallyExpanded: isActorListExpanded,
-        expandedCrossAxisAlignment: CrossAxisAlignment.start,
-        expandedAlignment: Alignment.topLeft,
-        collapsedTextColor: Colors.white,
-        backgroundColor: Colors.transparent,
-        collapsedBackgroundColor: Colors.transparent,
-        childrenPadding: const EdgeInsets.symmetric(
-          horizontal: 15,
-          vertical: 10,
-        ),
-        title: Text(
-          'Actors',
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: Theme.of(context).textTheme.titleLarge?.fontSize,
-          ),
-        ),
-        children: [
-          for (var actor in movie.actor!) actorListTile(actor, context)
-        ],
-      ),
-    );
-  }
-
-  Widget actorListTile(Actor actor, BuildContext context) => Padding(
-        padding: const EdgeInsets.symmetric(vertical: 10),
-        child: Row(
-          children: [
-            Expanded(
-              child: CircleAvatar(
-                backgroundImage: NetworkImage(
-                  actor.image.toString(),
-                ),
-                radius: MediaQuery.of(context).size.width * 0.1,
-              ),
-            ),
-            Expanded(
-              flex: 2,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    actor.name.toString(),
-                    style: const TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    "As ${actor.asCharacter.toString()}",
-                    style: TextStyle(
-                      color: Colors.white.withOpacity(0.7),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      );
 }

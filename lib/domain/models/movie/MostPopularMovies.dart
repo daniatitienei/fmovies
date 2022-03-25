@@ -15,7 +15,7 @@ class MostPopularMovies {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     if (movies != null) {
       data['items'] = movies!.map((v) => v.toJson()).toList();
     }
@@ -63,7 +63,7 @@ class CommingSoonMovie {
   }
 
   Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = Map<String, dynamic>();
+    final Map<String, dynamic> data = <String, dynamic>{};
     data['id'] = id;
     data['rank'] = rank;
     data['rankUpDown'] = rankUpDown;
