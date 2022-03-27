@@ -100,6 +100,21 @@ class _InspectMovieState extends State<InspectMovie> {
                       Container(
                         height: 20,
                       ),
+                      Text(
+                        'Description',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize:
+                              Theme.of(context).textTheme.titleLarge?.fontSize,
+                        ),
+                      ),
+                      Container(
+                        height: 8,
+                      ),
+                      Text(movie.plot.toString()),
+                      Container(
+                        height: 20,
+                      ),
                       ActorsExpandableCard(
                         movie: movie,
                         onExpansionChanged: (expansion) =>
